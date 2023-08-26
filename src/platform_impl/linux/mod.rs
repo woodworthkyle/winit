@@ -926,3 +926,21 @@ fn is_main_thread() -> bool {
 fn is_main_thread() -> bool {
     std::thread::current().name() == Some("main")
 }
+
+pub struct Menu(usize);
+
+impl Menu {
+    pub fn new() -> Menu {
+        Menu(0)
+    }
+
+    pub fn new_for_popup() -> Menu {
+        Menu(0)
+    }
+
+    pub fn add_dropdown(&mut self, menu: Menu, text: &str, enabled: bool) {}
+
+    pub fn add_item(&mut self, id: u32, text: &str, selected: Option<bool>, enabled: bool) {}
+
+    pub fn add_separator(&mut self) {}
+}
