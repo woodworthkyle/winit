@@ -20,6 +20,9 @@ extern_class!(
     }
 );
 
+unsafe impl Sync for NSView {}
+unsafe impl Send for NSView {}
+
 // Documented as "Main Thread Only".
 // > generally thread safe, although operations on views such as creating,
 // > resizing, and moving should happen on the main thread.

@@ -7,6 +7,8 @@ use std::os::raw::c_void;
 use std::ptr::NonNull;
 use std::sync::{Mutex, MutexGuard};
 
+use objc2::ffi::NO;
+use objc2::runtime::AnyObject;
 use raw_window_handle::{
     AppKitDisplayHandle, AppKitWindowHandle, RawDisplayHandle, RawWindowHandle,
 };
@@ -1542,6 +1544,27 @@ impl WindowExtMacOS for WinitWindow {
     fn option_as_alt(&self) -> OptionAsAlt {
         let shared_state_lock = self.lock_shared_state("option_as_alt");
         shared_state_lock.option_as_alt
+    }
+
+    fn show_context_menu(&self, menu: crate::menu::Menu, position: Option<Position>) {
+        unsafe {
+            let scale = self.scale_factor();
+            let position = if let Some(pos) = position.map(|p| p.to_logical(scale)) {
+                let view_rect: NSRect = self.view().frame();
+                NSPoint::new(pos.x, view_rect.size.height - pos.y)
+            } else {
+                let mouse_location = self.mouseLocationOutsideOfEventStream();
+                let pos = Position::Logical(LogicalPosition {
+                    x: mouse_location.x,
+                    y: mouse_location.y,
+                });
+                let pos = pos.to_logical(scale);
+                NSPoint::new(pos.x, pos.y)
+            };
+            self.view().set_context_menu(menu.into_inner().0, position);
+            let view: *mut WinitView = Id::as_ptr(&self.view()) as *mut _;
+            let () = msg_send![view as *mut _, performSelectorOnMainThread: sel!(showContextMenu:) withObject: std::ptr::null::<AnyObject>() waitUntilDone: NO];
+        }
     }
 }
 

@@ -553,6 +553,9 @@ pub enum WindowEvent {
     /// [`padding`]: https://developer.mozilla.org/en-US/docs/Web/CSS/padding
     /// [`transform`]: https://developer.mozilla.org/en-US/docs/Web/CSS/transform
     Occluded(bool),
+
+    /// A menu item was pressed
+    MenuAction(usize),
 }
 
 /// Identifier of an input device.

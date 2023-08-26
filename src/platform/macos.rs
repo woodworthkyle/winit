@@ -3,7 +3,9 @@ use std::os::raw::c_void;
 use objc2::rc::Id;
 
 use crate::{
+    dpi::Position,
     event_loop::{EventLoopBuilder, EventLoopWindowTarget},
+    menu::Menu,
     monitor::MonitorHandle,
     window::{Window, WindowBuilder},
 };
@@ -79,6 +81,8 @@ pub trait WindowExtMacOS {
 
     /// Getter for the [`WindowExtMacOS::set_option_as_alt`].
     fn option_as_alt(&self) -> OptionAsAlt;
+
+    fn show_context_menu(&self, menu: Menu, position: Option<Position>);
 }
 
 impl WindowExtMacOS for Window {
@@ -156,6 +160,11 @@ impl WindowExtMacOS for Window {
     #[inline]
     fn option_as_alt(&self) -> OptionAsAlt {
         self.window.maybe_wait_on_main(|w| w.option_as_alt())
+    }
+
+    fn show_context_menu(&self, menu: Menu, position: Option<Position>) {
+        self.window
+            .maybe_queue_on_main(move |w| w.show_context_menu(menu, position))
     }
 }
 
