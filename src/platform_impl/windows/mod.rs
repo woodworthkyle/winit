@@ -171,23 +171,7 @@ unsafe fn set_window_long(hwnd: HWND, nindex: WINDOW_LONG_PTR_INDEX, dwnewlong: 
     ) as isize;
 }
 
-pub struct Menu(usize);
-
-impl Menu {
-    pub fn new() -> Menu {
-        Menu(0)
-    }
-
-    pub fn new_for_popup() -> Menu {
-        Menu(0)
-    }
-
-    pub fn add_dropdown(&mut self, menu: Menu, text: &str, enabled: bool) {}
-
-    pub fn add_item(&mut self, id: u32, text: &str, selected: Option<bool>, enabled: bool) {}
-
-    pub fn add_separator(&mut self) {}
-}
+pub use menu::Menu;
 
 #[macro_use]
 mod util;
@@ -200,6 +184,7 @@ mod icon;
 mod ime;
 mod keyboard;
 mod keyboard_layout;
+mod menu;
 mod monitor;
 mod raw_input;
 mod window;

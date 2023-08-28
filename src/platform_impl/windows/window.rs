@@ -8,7 +8,8 @@ use std::{
     ffi::c_void,
     io,
     mem::{self, MaybeUninit},
-    panic, ptr,
+    panic,
+    ptr::{self, null},
     sync::{mpsc::channel, Arc, Mutex, MutexGuard},
 };
 
@@ -44,11 +45,12 @@ use windows_sys::Win32::{
             GetSystemMetrics, GetWindowPlacement, GetWindowTextLengthW, GetWindowTextW,
             IsWindowVisible, LoadCursorW, PeekMessageW, PostMessageW, RegisterClassExW, SetCursor,
             SetCursorPos, SetForegroundWindow, SetWindowDisplayAffinity, SetWindowPlacement,
-            SetWindowPos, SetWindowTextW, CS_HREDRAW, CS_VREDRAW, CW_USEDEFAULT, FLASHWINFO,
-            FLASHW_ALL, FLASHW_STOP, FLASHW_TIMERNOFG, FLASHW_TRAY, GWLP_HINSTANCE, HTBOTTOM,
-            HTBOTTOMLEFT, HTBOTTOMRIGHT, HTCAPTION, HTLEFT, HTRIGHT, HTTOP, HTTOPLEFT, HTTOPRIGHT,
-            NID_READY, PM_NOREMOVE, SM_DIGITIZER, SWP_ASYNCWINDOWPOS, SWP_NOACTIVATE, SWP_NOSIZE,
-            SWP_NOZORDER, WDA_EXCLUDEFROMCAPTURE, WDA_NONE, WM_NCLBUTTONDOWN, WNDCLASSEXW,
+            SetWindowPos, SetWindowTextW, TrackPopupMenu, CS_HREDRAW, CS_VREDRAW, CW_USEDEFAULT,
+            FLASHWINFO, FLASHW_ALL, FLASHW_STOP, FLASHW_TIMERNOFG, FLASHW_TRAY, GWLP_HINSTANCE,
+            HTBOTTOM, HTBOTTOMLEFT, HTBOTTOMRIGHT, HTCAPTION, HTLEFT, HTRIGHT, HTTOP, HTTOPLEFT,
+            HTTOPRIGHT, NID_READY, PM_NOREMOVE, SM_DIGITIZER, SWP_ASYNCWINDOWPOS, SWP_NOACTIVATE,
+            SWP_NOSIZE, SWP_NOZORDER, TPM_LEFTALIGN, WDA_EXCLUDEFROMCAPTURE, WDA_NONE,
+            WM_NCLBUTTONDOWN, WNDCLASSEXW,
         },
     },
 };
@@ -57,6 +59,7 @@ use crate::{
     dpi::{PhysicalPosition, PhysicalSize, Position, Size},
     error::{ExternalError, NotSupportedError, OsError as RootOsError},
     icon::Icon,
+    menu::Menu,
     platform_impl::platform::{
         dark_mode::try_theme,
         definitions::{
@@ -884,6 +887,27 @@ impl Window {
                 char_buff.len() as i32,
                 0,
             );
+        }
+    }
+
+    pub fn show_context_menu(&self, menu: Menu, position: Option<Position>) {
+        let hmenu = menu.into_inner().into_hmenu();
+        unsafe {
+            let pt = if let Some(pos) = position {
+                let scale_factor = self.scale_factor();
+                let pos = pos.to_physical::<i32>(scale_factor);
+                let mut pt = POINT {
+                    x: pos.x as _,
+                    y: pos.y as _,
+                };
+                ClientToScreen(self.hwnd(), &mut pt);
+                pt
+            } else {
+                let mut pt = POINT { x: 0, y: 0 };
+                GetCursorPos(&mut pt);
+                pt
+            };
+            TrackPopupMenu(hmenu, TPM_LEFTALIGN, pt.x, pt.y, 0, self.hwnd(), null());
         }
     }
 }
