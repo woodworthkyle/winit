@@ -1542,11 +1542,36 @@ unsafe fn public_window_callback_inner<T: 'static>(
         }
 
         WM_LBUTTONDOWN => {
-            use crate::event::{ElementState::Pressed, MouseButton::Left, WindowEvent::MouseInput};
+            use crate::event::{
+                ElementState::Pressed, MouseButton::Left, WindowEvent::CursorMoved,
+                WindowEvent::MouseInput,
+            };
 
             capture_mouse(window, &mut userdata.window_state_lock());
 
             update_modifiers(window, userdata);
+
+            let x = super::get_x_lparam(lparam as u32) as f64;
+            let y = super::get_y_lparam(lparam as u32) as f64;
+            let position = PhysicalPosition::new(x, y);
+            let cursor_moved;
+            {
+                // handle spurious WM_MOUSEMOVE messages
+                // see https://devblogs.microsoft.com/oldnewthing/20031001-00/?p=42343
+                // and http://debugandconquer.blogspot.com/2015/08/the-cause-of-spurious-mouse-move.html
+                let mut w = userdata.window_state_lock();
+                cursor_moved = w.mouse.last_position != Some(position);
+                w.mouse.last_position = Some(position);
+            }
+            if cursor_moved {
+                userdata.send_event(Event::WindowEvent {
+                    window_id: RootWindowId(WindowId(window)),
+                    event: CursorMoved {
+                        device_id: DEVICE_ID,
+                        position,
+                    },
+                });
+            }
 
             userdata.send_event(Event::WindowEvent {
                 window_id: RootWindowId(WindowId(window)),
@@ -1581,12 +1606,35 @@ unsafe fn public_window_callback_inner<T: 'static>(
 
         WM_RBUTTONDOWN => {
             use crate::event::{
-                ElementState::Pressed, MouseButton::Right, WindowEvent::MouseInput,
+                ElementState::Pressed, MouseButton::Right, WindowEvent::CursorMoved,
+                WindowEvent::MouseInput,
             };
 
             capture_mouse(window, &mut userdata.window_state_lock());
 
             update_modifiers(window, userdata);
+
+            let x = super::get_x_lparam(lparam as u32) as f64;
+            let y = super::get_y_lparam(lparam as u32) as f64;
+            let position = PhysicalPosition::new(x, y);
+            let cursor_moved;
+            {
+                // handle spurious WM_MOUSEMOVE messages
+                // see https://devblogs.microsoft.com/oldnewthing/20031001-00/?p=42343
+                // and http://debugandconquer.blogspot.com/2015/08/the-cause-of-spurious-mouse-move.html
+                let mut w = userdata.window_state_lock();
+                cursor_moved = w.mouse.last_position != Some(position);
+                w.mouse.last_position = Some(position);
+            }
+            if cursor_moved {
+                userdata.send_event(Event::WindowEvent {
+                    window_id: RootWindowId(WindowId(window)),
+                    event: CursorMoved {
+                        device_id: DEVICE_ID,
+                        position,
+                    },
+                });
+            }
 
             userdata.send_event(Event::WindowEvent {
                 window_id: RootWindowId(WindowId(window)),

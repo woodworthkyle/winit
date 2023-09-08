@@ -41,16 +41,17 @@ use windows_sys::Win32::{
             Touch::{RegisterTouchWindow, TWF_WANTPALM},
         },
         WindowsAndMessaging::{
-            CreateWindowExW, FlashWindowEx, GetClientRect, GetCursorPos, GetForegroundWindow,
-            GetSystemMetrics, GetWindowPlacement, GetWindowTextLengthW, GetWindowTextW,
-            IsWindowVisible, LoadCursorW, PeekMessageW, PostMessageW, RegisterClassExW, SetCursor,
-            SetCursorPos, SetForegroundWindow, SetWindowDisplayAffinity, SetWindowPlacement,
-            SetWindowPos, SetWindowTextW, TrackPopupMenu, CS_HREDRAW, CS_VREDRAW, CW_USEDEFAULT,
-            FLASHWINFO, FLASHW_ALL, FLASHW_STOP, FLASHW_TIMERNOFG, FLASHW_TRAY, GWLP_HINSTANCE,
-            HTBOTTOM, HTBOTTOMLEFT, HTBOTTOMRIGHT, HTCAPTION, HTLEFT, HTRIGHT, HTTOP, HTTOPLEFT,
-            HTTOPRIGHT, NID_READY, PM_NOREMOVE, SM_DIGITIZER, SWP_ASYNCWINDOWPOS, SWP_NOACTIVATE,
-            SWP_NOSIZE, SWP_NOZORDER, TPM_LEFTALIGN, WDA_EXCLUDEFROMCAPTURE, WDA_NONE,
-            WM_NCLBUTTONDOWN, WNDCLASSEXW,
+            CreateWindowExW, DestroyMenu, FlashWindowEx, GetClientRect, GetCursorPos,
+            GetForegroundWindow, GetSystemMetrics, GetWindowPlacement, GetWindowTextLengthW,
+            GetWindowTextW, IsWindowVisible, LoadCursorW, PeekMessageW, PostMessageW,
+            RegisterClassExW, SetCursor, SetCursorPos, SetForegroundWindow,
+            SetWindowDisplayAffinity, SetWindowPlacement, SetWindowPos, SetWindowTextW,
+            TrackPopupMenu, CS_HREDRAW, CS_VREDRAW, CW_USEDEFAULT, FLASHWINFO, FLASHW_ALL,
+            FLASHW_STOP, FLASHW_TIMERNOFG, FLASHW_TRAY, GWLP_HINSTANCE, HTBOTTOM, HTBOTTOMLEFT,
+            HTBOTTOMRIGHT, HTCAPTION, HTLEFT, HTRIGHT, HTTOP, HTTOPLEFT, HTTOPRIGHT, NID_READY,
+            PM_NOREMOVE, SM_DIGITIZER, SWP_ASYNCWINDOWPOS, SWP_NOACTIVATE, SWP_NOSIZE,
+            SWP_NOZORDER, TPM_LEFTALIGN, WDA_EXCLUDEFROMCAPTURE, WDA_NONE, WM_NCLBUTTONDOWN,
+            WM_NULL, WNDCLASSEXW,
         },
     },
 };
@@ -908,6 +909,7 @@ impl Window {
                 pt
             };
             TrackPopupMenu(hmenu, TPM_LEFTALIGN, pt.x, pt.y, 0, self.hwnd(), null());
+            DestroyMenu(hmenu);
         }
     }
 }
