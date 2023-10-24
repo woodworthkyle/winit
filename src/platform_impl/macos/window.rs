@@ -9,9 +9,6 @@ use std::sync::{Mutex, MutexGuard};
 
 use objc2::ffi::NO;
 use objc2::runtime::AnyObject;
-use raw_window_handle::{
-    AppKitDisplayHandle, AppKitWindowHandle, RawDisplayHandle, RawWindowHandle,
-};
 
 use crate::{
     dpi::{
