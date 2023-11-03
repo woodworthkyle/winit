@@ -543,13 +543,16 @@ impl Window {
         self.window.maybe_wait_on_main(|w| WindowId(w.id()))
     }
 
-    /// Returns the scale factor that can be used to map logical pixels to physical pixels, and vice versa.
-    ///
-    /// See the [`dpi`](crate::dpi) module for more information.
+    /// Returns the scale factor that can be used to map logical pixels to physical pixels, and
+    /// vice versa.
     ///
     /// Note that this value can change depending on user action (for example if the window is
     /// moved to another screen); as such, tracking [`WindowEvent::ScaleFactorChanged`] events is
     /// the most robust way to track the DPI you need to use to draw.
+    ///
+    /// This value may differ from [`MonitorHandle::scale_factor`].
+    ///
+    /// See the [`dpi`](crate::dpi) module for more information.
     ///
     /// ## Platform-specific
     ///
@@ -597,11 +600,11 @@ impl Window {
         self.window.maybe_queue_on_main(|w| w.request_redraw())
     }
 
-    /// Notify the windowing system that you're before presenting to the window.
+    /// Notify the windowing system before presenting to the window.
     ///
-    /// You should call this event after you've done drawing operations, but before you submit
+    /// You should call this event after your drawing operations, but before you submit
     /// the buffer to the display or commit your drawings. Doing so will help winit to properly
-    /// schedule and do assumptions about its internal state. For example, it could properly
+    /// schedule and make assumptions about its internal state. For example, it could properly
     /// throttle [`WindowEvent::RedrawRequested`].
     ///
     /// ## Example
@@ -904,7 +907,7 @@ impl Window {
     ///
     /// ## Platform-specific
     ///
-    /// - **Windows / Web / iOS / Android / Orbital:** Unsupported.
+    /// - **Web / iOS / Android / Orbital:** Unsupported.
     /// - **X11:** Can only be set while building the window, with [`WindowBuilder::with_transparent`].
     #[inline]
     pub fn set_transparent(&self, transparent: bool) {
@@ -918,7 +921,7 @@ impl Window {
     ///
     /// ## Platform-specific
     ///
-    /// - **Android / iOS / macOS / X11 / Web / Windows:** Unsupported.
+    /// - **Android / iOS / X11 / Web / Windows:** Unsupported.
     /// - **Wayland:** Only works with org_kde_kwin_blur_manager protocol.
     #[inline]
     pub fn set_blur(&self, blur: bool) {

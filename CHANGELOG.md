@@ -11,9 +11,18 @@ Unreleased` header.
 
 # Unreleased
 
+- On Windows, fix so `drag_window` and `drag_resize_window` can be called from another thread.
+
+# 0.29.3
+
+- On Wayland, apply correct scale to `PhysicalSize` passed in `WindowBuilder::with_inner_size` when possible.
 - On Wayland, fix `RedrawRequsted` being always sent without decorations and `sctk-adwaita` feature.
+- On Wayland, ignore resize requests when the window is fully tiled.
+- On Wayland, use `configure_bounds` to constrain `with_inner_size` when compositor wants users to pick size.
 - On Windows, fix deadlock when accessing the state during `Cursor{Enter,Leave}`.
+- On Windows, add support for `Window::set_transparent`.
 - On macOS, fix deadlock when entering a nested event loop from an event handler.
+- On macOS, add support for `Window::set_blur`.
 
 # 0.29.2
 

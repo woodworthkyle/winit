@@ -128,7 +128,16 @@ impl Window {
         }
     }
 
-    pub fn set_transparent(&self, _transparent: bool) {}
+    pub fn set_transparent(&self, transparent: bool) {
+        let window = self.window.clone();
+        let window_state = Arc::clone(&self.window_state);
+        self.thread_executor.execute_in_thread(move || {
+            let _ = &window;
+            WindowState::set_window_flags(window_state.lock().unwrap(), window.0, |f| {
+                f.set(WindowFlags::TRANSPARENT, transparent)
+            });
+        });
+    }
 
     pub fn set_blur(&self, _blur: bool) {}
 
@@ -465,27 +474,41 @@ impl Window {
     }
 
     unsafe fn handle_os_dragging(&self, wparam: WPARAM) {
-        let points = {
-            let mut pos = unsafe { mem::zeroed() };
-            unsafe { GetCursorPos(&mut pos) };
-            pos
-        };
-        let points = POINTS {
-            x: points.x as i16,
-            y: points.y as i16,
-        };
-        unsafe { ReleaseCapture() };
+        let window = self.window.clone();
+        let window_state = self.window_state.clone();
 
-        self.window_state_lock().dragging = true;
+        self.thread_executor.execute_in_thread(move || {
+            {
+                let mut guard = window_state.lock().unwrap();
+                if !guard.dragging {
+                    guard.dragging = true;
+                } else {
+                    return;
+                }
+            }
 
-        unsafe {
-            PostMessageW(
-                self.hwnd(),
-                WM_NCLBUTTONDOWN,
-                wparam,
-                &points as *const _ as LPARAM,
-            )
-        };
+            let points = {
+                let mut pos = unsafe { mem::zeroed() };
+                unsafe { GetCursorPos(&mut pos) };
+                pos
+            };
+            let points = POINTS {
+                x: points.x as i16,
+                y: points.y as i16,
+            };
+
+            // ReleaseCapture needs to execute on the main thread
+            unsafe { ReleaseCapture() };
+
+            unsafe {
+                PostMessageW(
+                    window.0,
+                    WM_NCLBUTTONDOWN,
+                    wparam,
+                    &points as *const _ as LPARAM,
+                )
+            };
+        });
     }
 
     #[inline]
