@@ -21,6 +21,7 @@ use super::{
     },
     event::{code_to_key, code_to_location},
 };
+use crate::platform_impl::platform::window::position_traffic_lights;
 use crate::{
     dpi::{LogicalPosition, LogicalSize},
     event::{
@@ -245,6 +246,7 @@ declare_class!(
             let logical_size = LogicalSize::new(rect.size.width as f64, rect.size.height as f64);
             let size = logical_size.to_physical::<u32>(self.scale_factor());
             self.queue_event(WindowEvent::Resized(size));
+            position_traffic_lights(&self.window());
         }
 
         #[method(drawRect:)]

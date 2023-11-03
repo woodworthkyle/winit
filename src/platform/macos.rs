@@ -205,6 +205,8 @@ pub trait WindowBuilderExtMacOS {
     fn with_fullsize_content_view(self, fullsize_content_view: bool) -> Self;
     fn with_disallow_hidpi(self, disallow_hidpi: bool) -> Self;
     fn with_has_shadow(self, has_shadow: bool) -> Self;
+    fn with_movable(self, movable: bool) -> Self;
+    fn with_traffic_lights_offset(self, x: f64, y: f64) -> Self;
     /// Window accepts click-through mouse events.
     fn with_accepts_first_mouse(self, accepts_first_mouse: bool) -> Self;
     /// Defines the window tabbing identifier.
@@ -245,6 +247,18 @@ impl WindowBuilderExtMacOS for WindowBuilder {
     #[inline]
     fn with_title_hidden(mut self, title_hidden: bool) -> Self {
         self.platform_specific.title_hidden = title_hidden;
+        self
+    }
+
+    #[inline]
+    fn with_movable(mut self, movable: bool) -> Self {
+        self.platform_specific.movable = movable;
+        self
+    }
+
+    #[inline]
+    fn with_traffic_lights_offset(mut self, x: f64, y: f64) -> Self {
+        self.platform_specific.traffic_lights_offset = Some((x, y));
         self
     }
 

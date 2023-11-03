@@ -2,7 +2,7 @@ use std::ffi::c_void;
 use std::num::NonZeroIsize;
 use std::ptr;
 
-use icrate::Foundation::{NSObject, NSPoint, NSRect};
+use icrate::Foundation::{CGPoint, NSObject, NSPoint, NSRect};
 use objc2::rc::Id;
 use objc2::runtime::AnyObject;
 use objc2::{extern_class, extern_methods, mutability, ClassType};
@@ -91,6 +91,12 @@ extern_methods!(
 
         #[method(setHidden:)]
         pub fn setHidden(&self, hidden: bool);
+
+        #[method(setFrame:)]
+        pub fn setFrame(&self, rect: NSRect);
+
+        #[method(setFrameOrigin:)]
+        pub fn setFrameOrigin(&self, origin: CGPoint);
     }
 );
 
