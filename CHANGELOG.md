@@ -11,7 +11,19 @@ Unreleased` header.
 
 # Unreleased
 
+- On macOS, add services menu.
+- On macOS, remove spurious error logging when handling `Fn`.
+
+# 0.29.4
+
+- Fix crash when running iOS app on macOS.
+- On X11, check common alternative cursor names when loading cursor.
+- On X11, reload the DPI after a property change event.
 - On Windows, fix so `drag_window` and `drag_resize_window` can be called from another thread.
+- On Windows, fix `set_control_flow` in `AboutToWait` not being taken in account.
+- On macOS, send a `Resized` event after each `ScaleFactorChanged` event.
+- On Wayland, fix `wl_surface` being destroyed before associated objects.
+- On macOS, fix assertion when pressing `Fn` key.
 
 # 0.29.3
 
