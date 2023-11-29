@@ -11,7 +11,7 @@ pub struct Menu(pub(crate) Id<NSMenu>);
 fn make_menu_item(id: u32, text: &str, selected: Option<bool>, enabled: bool) -> Id<NSMenuItem> {
     let item = NSMenuItem::newWithTitle(
         &NSString::from_str(text),
-        sel!(handleMenuItem:),
+        Some(sel!(handleMenuItem:)),
         ns_string!(""),
     );
 
