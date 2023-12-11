@@ -25,7 +25,10 @@ use crate::{
     event::{Event, InnerSizeWriter, WindowEvent},
     event_loop::AsyncRequestSerial,
     platform_impl::{
-        x11::{atoms::*, MonitorHandle as X11MonitorHandle, WakeSender, X11Error},
+        x11::{
+            atoms::*, xinput_fp1616_to_float, MonitorHandle as X11MonitorHandle, WakeSender,
+            X11Error,
+        },
         Fullscreen, MonitorHandle as PlatformMonitorHandle, OsError, PlatformIcon,
         PlatformSpecificWindowBuilderAttributes, VideoMode as PlatformVideoMode,
     },
@@ -1374,7 +1377,8 @@ impl UnownedWindow {
             self.xwindow as xproto::Window,
             xproto::AtomEnum::WM_NORMAL_HINTS,
         )?
-        .reply()?;
+        .reply()?
+        .unwrap_or_default();
         callback(&mut normal_hints);
         normal_hints
             .set(
@@ -1427,6 +1431,7 @@ impl UnownedWindow {
         )
         .ok()
         .and_then(|cookie| cookie.reply().ok())
+        .flatten()
         .and_then(|hints| hints.size_increment)
         .map(|(width, height)| (width as u32, height as u32).into())
     }
@@ -1739,8 +1744,8 @@ impl UnownedWindow {
                         | xproto::EventMask::SUBSTRUCTURE_NOTIFY,
                 ),
                 [
-                    (window.x as u32 + pointer.win_x as u32),
-                    (window.y as u32 + pointer.win_y as u32),
+                    (window.x as u32 + xinput_fp1616_to_float(pointer.win_x) as u32),
+                    (window.y as u32 + xinput_fp1616_to_float(pointer.win_y) as u32),
                     action.try_into().unwrap(),
                     1, // Button 1
                     1,
@@ -1782,9 +1787,9 @@ impl UnownedWindow {
         let state_type_atom = atoms[CARD32];
         let is_minimized = if let Ok(state) =
             self.xconn
-                .get_property(self.xwindow, state_atom, state_type_atom)
+                .get_property::<u32>(self.xwindow, state_atom, state_type_atom)
         {
-            state.contains(&(ffi::IconicState as c_ulong))
+            state.contains(&super::ICONIC_STATE)
         } else {
             false
         };
@@ -1821,6 +1826,7 @@ impl UnownedWindow {
             WmHints::get(self.xconn.xcb_connection(), self.xwindow as xproto::Window)
                 .ok()
                 .and_then(|cookie| cookie.reply().ok())
+                .flatten()
                 .unwrap_or_default();
 
         wm_hints.urgent = request_type.is_some();
