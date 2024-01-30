@@ -108,7 +108,7 @@ impl fmt::Display for OsError {
     }
 }
 
-pub struct Menu(size);
+pub struct Menu(usize);
 
 impl Menu {
     pub fn new() -> Menu {
