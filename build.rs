@@ -21,4 +21,12 @@ fn main() {
         wayland_platform: { all(feature = "wayland", free_unix, not(wasm), not(redox)) },
         orbital_platform: { redox },
     }
+    
+    let target_os = std::env::var("CARGO_CFG_TARGET_OS").expect("target OS not detected");
+    match target_os.as_str() {
+        "ios" => {
+            
+        },
+        _ => {}
+    }
 }

@@ -7,6 +7,7 @@ use icrate::Foundation::NSString;
 
 mod application;
 mod coordinate_space;
+mod color;
 mod device;
 mod event;
 mod responder;
@@ -21,6 +22,7 @@ mod window;
 
 pub(crate) use self::application::UIApplication;
 pub(crate) use self::coordinate_space::UICoordinateSpace;
+pub(crate) use self::color::UIColor;
 pub(crate) use self::device::UIDevice;
 pub(crate) use self::event::UIEvent;
 pub(crate) use self::responder::UIResponder;
