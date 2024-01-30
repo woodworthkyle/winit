@@ -25,7 +25,9 @@ fn main() {
     let target_os = std::env::var("CARGO_CFG_TARGET_OS").expect("target OS not detected");
     match target_os.as_str() {
         "ios" => {
-            
+            println!("cargo:rustc-link-lib=framework=CoreGraphics");
+            println!("cargo:rustc-link-search=framework=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/iOSSupport/System/Library/Frameworks/");
+            println!("cargo:rustc-link-lib=framework=UIKit");
         },
         _ => {}
     }
