@@ -123,5 +123,5 @@ impl Menu {
     
     pub fn add_item(&mut self, id: u32, text: &str, selected: Option<bool>, enabled: bool) {}
     
-    pub fn add_seperator(&mut self) {}
+    pub fn add_separator(&mut self) {}
 }
