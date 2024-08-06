@@ -12,7 +12,7 @@ use super::app_state::{self, EventWrapper};
 use super::uikit::{
     UIApplication, UIDevice, UIEvent, UIForceTouchCapability, UIInterfaceOrientationMask,
     UIResponder, UIStatusBarStyle, UITouch, UITouchPhase, UITouchType, UITraitCollection, UIView,
-    UIViewController, UIWindow,
+    UIViewController, UIWindow, UIColor
 };
 use super::window::WindowId;
 use crate::{
