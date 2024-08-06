@@ -24,5 +24,8 @@ extern_methods!(
     unsafe impl UIColor {
         #[method_id(clearColor)]
         pub fn clear() -> Id<Self>;
+
+        #[method_id(redColor)]
+        pub fn red() -> Id<Self>;
     }
 );

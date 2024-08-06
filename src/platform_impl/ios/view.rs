@@ -187,6 +187,7 @@ impl WinitView {
         let this: Id<Self> = unsafe { msg_send_id![Self::alloc(), initWithFrame: frame] };
 
         this.setMultipleTouchEnabled(true);
+        this.setBackgroundColor(&UIColor::red());
 
         if let Some(scale_factor) = platform_attributes.scale_factor {
             this.setContentScaleFactor(scale_factor as _);

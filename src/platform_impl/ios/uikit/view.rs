@@ -3,7 +3,7 @@ use objc2::encode::{Encode, Encoding};
 use objc2::rc::Id;
 use objc2::{extern_class, extern_methods, msg_send_id, mutability, ClassType};
 
-use super::{UICoordinateSpace, UIResponder, UIViewController};
+use super::{UICoordinateSpace, UIResponder, UIViewController, UIColor};
 
 extern_class!(
     #[derive(Debug, PartialEq, Eq, Hash)]
@@ -65,6 +65,9 @@ extern_methods!(
 
         #[method(setNeedsDisplay)]
         pub fn setNeedsDisplay(&self);
+
+        #[method(setBackgroundColor:)]
+        pub(crate) fn setBackgroundColor(&self, color: &UIColor);
     }
 );
 
