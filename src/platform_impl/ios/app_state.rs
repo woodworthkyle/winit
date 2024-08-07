@@ -487,6 +487,7 @@ pub(crate) fn set_key_window(mtm: MainThreadMarker, window: &Id<WinitUIWindow>) 
 }
 
 pub(crate) fn queue_gl_or_metal_redraw(mtm: MainThreadMarker, window: Id<WinitUIWindow>) {
+    println!("QUEUE_GL_OR_METAL_REDRAW!!!!!!!!");
     let mut this = AppState::get_mut(mtm);
     match this.state_mut() {
         &mut AppStateImpl::NotLaunched {
