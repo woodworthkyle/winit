@@ -453,7 +453,7 @@ impl Window {
 
         let gl_or_metal_backed = unsafe {
             let layer_class = WinitView::layerClass();
-            let is_metal = msg_send![layer_class, isSubclassOfClass: class!(CAMetalLayer)];
+            let is_metal = msg_send![layer_class, isSubclassOfClass: class!(CALayer)];
             let is_gl = msg_send![layer_class, isSubclassOfClass: class!(CAEAGLLayer)];
             is_metal || is_gl
         };
