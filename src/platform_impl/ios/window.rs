@@ -450,6 +450,7 @@ impl Window {
         };
 
         let view = WinitView::new(mtm, &window_attributes, &platform_attributes, frame);
+        view.setBackgroundColor(&UIColor::yellow());
 
         let gl_or_metal_backed = unsafe {
             let layer_class = WinitView::layerClass();
