@@ -55,7 +55,9 @@ impl Inner {
     }
 
     pub fn request_redraw(&self) {
+        println!("Requesting redraw from winit");
         if self.gl_or_metal_backed {
+            println!("Requesting GL/METAL backend");
             let mtm = MainThreadMarker::new().unwrap();
             // `setNeedsDisplay` does nothing on UIViews which are directly backed by CAEAGLLayer or CAMetalLayer.
             // Ordinarily the OS sets up a bunch of UIKit state before calling drawRect: on a UIView, but when using
@@ -67,6 +69,7 @@ impl Inner {
             // https://developer.apple.com/documentation/uikit/uiview/1622437-setneedsdisplay?language=objc
             app_state::queue_gl_or_metal_redraw(mtm, self.window.clone());
         } else {
+            println!("Requesting UIView redraw");
             self.view.setNeedsDisplay();
         }
     }
