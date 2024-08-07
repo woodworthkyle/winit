@@ -553,6 +553,7 @@ pub fn did_finish_launching(mtm: MainThreadMarker) {
         window.setRootViewController(None);
         window.setRootViewController(controller.as_deref());
         window.setBackgroundColor(&UIColor::red());
+        window.rootViewController().view.setBackgroundColor(UIColor::cyan());
 
         window.makeKeyAndVisible();
     }
