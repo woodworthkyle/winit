@@ -26,6 +26,7 @@ use once_cell::sync::Lazy;
 
 use super::event_loop::{EventHandler, Never};
 use super::uikit::UIView;
+use super::uikit::color::UIColor;
 use super::view::WinitUIWindow;
 use crate::{
     dpi::PhysicalSize,
@@ -551,6 +552,7 @@ pub fn did_finish_launching(mtm: MainThreadMarker) {
         let controller = window.rootViewController();
         window.setRootViewController(None);
         window.setRootViewController(controller.as_deref());
+        window.setBackgroundColor(UIColor::redColor());
 
         window.makeKeyAndVisible();
     }
