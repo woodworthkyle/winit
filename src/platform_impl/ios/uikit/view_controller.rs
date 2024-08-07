@@ -38,7 +38,7 @@ extern_methods!(
         pub fn setView(&self, view: Option<&UIView>);
 
         #[method(getView)]
-        pub fn getView(&self);
+        pub fn getView(&self) -> Option<Id<UIView>>;
     }
 );
 
