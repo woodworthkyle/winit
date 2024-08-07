@@ -8,7 +8,7 @@ use objc2::runtime::AnyObject;
 use objc2::{class, msg_send};
 
 use super::app_state::EventWrapper;
-use super::uikit::{UIApplication, UIScreen, UIScreenOverscanCompensation};
+use super::uikit::{UIApplication, UIScreen, UIScreenOverscanCompensation, UIColor};
 use super::view::{WinitUIWindow, WinitView, WinitViewController};
 use crate::{
     dpi::{self, LogicalPosition, LogicalSize, PhysicalPosition, PhysicalSize, Position, Size},
