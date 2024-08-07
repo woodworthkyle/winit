@@ -27,5 +27,35 @@ extern_methods!(
 
         #[method_id(redColor)]
         pub fn red() -> Id<Self>;
+
+        #[method_id(orangeColor)]
+        pub fn orange() -> Id<Self>;
+
+        #[method_id(yellowColor)]
+        pub fn yellow() -> Id<Self>;
+
+        #[method_id(greenColor)]
+        pub fn green() -> Id<Self>;
+
+        #[method_id(blueColor)]
+        pub fn bleu() -> Id<Self>;
+
+        #[method_id(cyanColor)]
+        pub fn cyan() -> Id<Self>;
+
+        #[method_id(blackColor)]
+        pub fn black() -> Id<Self>;
+
+        #[method_id(brownColor)]
+        pub fn brown() -> Id<Self>;
+
+        #[method_id(grayColor)]
+        pub fn gray() -> Id<Self>;
+
+        #[method_id(purpleColor)]
+        pub fn purple() -> Id<Self>;
+
+        #[method_id(magentaColor)]
+        pub fn magenta() -> Id<Self>;
     }
 );
