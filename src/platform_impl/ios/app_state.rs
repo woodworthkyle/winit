@@ -554,6 +554,7 @@ pub fn did_finish_launching(mtm: MainThreadMarker) {
         window.setRootViewController(controller.as_deref());
         window.setBackgroundColor(&UIColor::red());
         window.rootViewController().expect("Root ViewController Doesn't Exist???").view().expect("View Doesn't Exist???").setBackgroundColor(&UIColor::cyan());
+        println!("making key and visible!");
 
         window.makeKeyAndVisible();
     }
