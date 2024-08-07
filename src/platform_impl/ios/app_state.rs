@@ -26,7 +26,7 @@ use once_cell::sync::Lazy;
 
 use super::event_loop::{EventHandler, Never};
 use super::uikit::UIView;
-use super::uikit::color::UIColor;
+use super::uikit::UIColor;
 use super::view::WinitUIWindow;
 use crate::{
     dpi::PhysicalSize,
